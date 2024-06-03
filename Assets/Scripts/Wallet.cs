@@ -1,12 +1,15 @@
+using System;
 using UnityEngine;
 
-[RequireComponent (typeof(TriggerReader))]
+[RequireComponent(typeof(TriggerReader))]
 
 public class Wallet : MonoBehaviour
 {
     private TriggerReader _triggerReader;
 
     public int CoinNumber { get; private set; }
+
+    public event Action<int> MoneyIsChanged;
 
     private void Awake()
     {
@@ -25,5 +28,8 @@ public class Wallet : MonoBehaviour
         _triggerReader.CoinIsGets -= AddCoin;
     }
 
-    private void AddCoin()=>CoinNumber++;
+    private void AddCoin()
+    {
+        MoneyIsChanged?.Invoke(++CoinNumber);
+    }
 }

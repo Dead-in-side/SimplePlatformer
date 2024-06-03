@@ -1,23 +1,29 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(InputReader), typeof(TriggerReader))]
+[RequireComponent(typeof(Rigidbody2D), typeof(InputReader))]
 
 public class Mover : MonoBehaviour
 {
+    [SerializeField] private Legs _legs;
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
 
     private InputReader _inputReader;
     private Rigidbody2D _rigidbody2D;
-    private TriggerReader _triggerReader;
     private float _direction;
     private bool _isJump;
+    private float _angleRotate = 180f;
+    private Quaternion _startRotation;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _inputReader = GetComponent<InputReader>();
-        _triggerReader = GetComponent<TriggerReader>();
+    }
+
+    private void Start()
+    {
+        _startRotation = transform.rotation;
     }
 
     private void OnEnable()
@@ -36,18 +42,30 @@ public class Mover : MonoBehaviour
     {
         _rigidbody2D.velocity = new Vector2(_direction * _speed * Time.fixedDeltaTime, _rigidbody2D.velocity.y);
 
-        if (_isJump && _triggerReader.IsGrounded)
+        if (_isJump && _legs.IsGrounded)
         {
             _rigidbody2D.AddForce(Vector2.up * _jumpForce);
             _isJump = false;
         }
     }
 
-    private void ChangeDirection(float newDirection) => _direction = newDirection;
+    private void ChangeDirection(float newDirection)
+    {
+        _direction = newDirection;
+
+        if (_direction < 0)
+        {
+            transform.rotation = Quaternion.AngleAxis(_angleRotate, Vector2.up);
+        }
+        else if (_direction > 0)
+        {
+            transform.rotation = _startRotation;
+        }
+    }
 
     private void Jump()
     {
-        if (_triggerReader.IsGrounded)
+        if (_legs.IsGrounded)
         {
             _isJump = true;
         }
