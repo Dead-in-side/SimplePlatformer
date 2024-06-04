@@ -21,11 +21,6 @@ public class Mover : MonoBehaviour
         _inputReader = GetComponent<InputReader>();
     }
 
-    private void Start()
-    {
-        _startRotation = transform.rotation;
-    }
-
     private void OnEnable()
     {
         _inputReader.MoveButtonPressed += ChangeDirection;
@@ -36,6 +31,11 @@ public class Mover : MonoBehaviour
     {
         _inputReader.MoveButtonPressed -= ChangeDirection;
         _inputReader.JumpButonPressed -= Jump;
+    }
+
+    private void Start()
+    {
+        _startRotation = transform.rotation;
     }
 
     private void FixedUpdate()

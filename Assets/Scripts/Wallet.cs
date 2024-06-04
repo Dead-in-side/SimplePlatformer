@@ -7,9 +7,9 @@ public class Wallet : MonoBehaviour
 {
     private TriggerReader _triggerReader;
 
-    public int CoinNumber { get; private set; }
-
     public event Action<int> MoneyIsChanged;
+
+    public int CoinNumber { get; private set; }
 
     private void Awake()
     {

@@ -2,16 +2,17 @@ using UnityEngine;
 
 [RequireComponent(typeof(Animator), typeof(InputReader), typeof(TriggerReader))]
 
-public class AinmationControler : MonoBehaviour
+public class AinmationShifter : MonoBehaviour
 {
     [SerializeField] private Legs _legs;
+
+    private readonly int IsRun = Animator.StringToHash(nameof(IsRun));
+    private readonly int IsJump = Animator.StringToHash(nameof(IsJump));
+    private readonly int IsDie = Animator.StringToHash(nameof(IsDie));
 
     private TriggerReader _triggerReader;
     private Animator _animator;
     private InputReader _inputReader;
-    private string _nameIsRun = "IsRun";
-    private string _nameIsJump = "Jump";
-    private string _nameIsDie = "Dead";
     private float _direction;
     private bool _isDead = false;
 
@@ -24,9 +25,9 @@ public class AinmationControler : MonoBehaviour
 
     private void Update()
     {
-        _animator.SetBool(_nameIsRun, _direction != 0);
-        _animator.SetBool(_nameIsJump, !_legs.IsGrounded);
-        _animator.SetBool(_nameIsDie, _isDead);
+        _animator.SetBool(IsRun, _direction != 0);
+        _animator.SetBool(IsJump, !_legs.IsGrounded);
+        _animator.SetBool(IsDie, _isDead);
     }
 
     private void OnEnable()

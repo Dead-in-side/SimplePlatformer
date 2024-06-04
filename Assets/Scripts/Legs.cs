@@ -4,14 +4,7 @@ using UnityEngine;
 
 public class Legs : MonoBehaviour
 {
-    public Collider2D Collider2D { get; private set; }
-
     public bool IsGrounded { get; private set; }
-
-    private void Awake()
-    {
-        Collider2D = GetComponent<Collider2D>();
-    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
