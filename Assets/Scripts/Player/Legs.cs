@@ -1,16 +1,21 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 
 public class Legs : MonoBehaviour
 {
-    public bool IsGrounded { get; private set; }
+    private bool _isGrounded;
+
+    public event Action<bool> IsOnTheGround;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent<Ground>(out _))
         {
-            IsGrounded = true;
+            _isGrounded = true;
+
+            IsOnTheGround?.Invoke(_isGrounded);
         }
     }
 
@@ -18,7 +23,9 @@ public class Legs : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent<Ground>(out _))
         {
-            IsGrounded = false;
+            _isGrounded = false;
+
+            IsOnTheGround?.Invoke(_isGrounded);
         }
     }
 }

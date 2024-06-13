@@ -8,16 +8,23 @@ public class InputReader : MonoBehaviour
 
     public event Action<float> MoveButtonPressed;
     public event Action JumpButonPressed;
+    public event Action MouseButtomPressed;
+
+    public float Direction {  get; private set; }
 
     private void Update()
     {
-        float direction = Input.GetAxis(Horizontal);
-        MoveButtonPressed?.Invoke(direction);
+        Direction = Input.GetAxis(Horizontal);
+        MoveButtonPressed?.Invoke(Direction);
 
         if (Input.GetButtonDown(Jump))
         {
             JumpButonPressed?.Invoke();
-            Debug.Log("Xui");
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            MouseButtomPressed?.Invoke();
         }
     }
 }
