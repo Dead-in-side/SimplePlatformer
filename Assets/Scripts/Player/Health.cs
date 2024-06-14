@@ -5,12 +5,14 @@ public class Health : MonoBehaviour
 {
     [SerializeField] private float _health = 100;
 
-    private float _healthRegeneration = 30;
     public event Action HealthEnd;
 
     public void TakeDamage(Enemy enemy)
     {
-        _health -= enemy.Damage;
+        if ((enemy.Damage >= 0))
+        {
+            _health -= enemy.Damage;
+        }
 
         Debug.Log(_health);
 
@@ -20,9 +22,13 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void Heal()
+    public void Heal(FirstAidKit firstAidKit)
     {
-        _health += _healthRegeneration;
+        if (firstAidKit.HealPower >= 0)
+        {
+            _health += firstAidKit.HealPower;
+
+        }
 
         Debug.Log(_health);
     }

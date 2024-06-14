@@ -7,19 +7,23 @@ using UnityEngine;
 public class EnemyMover : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    [SerializeField] private float _currentTime;
+    [SerializeField] private Transform[] _targetArray;
 
     private float _rotationAngle = 180;
-    private Queue<Vector2> _targetConteiner = new();
     private Rigidbody2D _rigidbody;
     private Coroutine _moverCoroutine;
+    private float _currentTime = 5f;
+    private float _minDistance = 0.1f;
+    private int _index;
+    private Transform _target;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
 
-        _targetConteiner.Enqueue(Vector2.right);
-        _targetConteiner.Enqueue(Vector2.left);
+        _index = 0;
+
+        _target = _targetArray[_index];
 
         _moverCoroutine = StartCoroutine(PatrulCoroutine());
     }
@@ -42,21 +46,29 @@ public class EnemyMover : MonoBehaviour
     {
         bool isWork = true;
 
+        Vector3 distance;
+
         float time = 0f;
 
         while (isWork)
         {
             time += Time.deltaTime;
 
-            _rigidbody.velocity = new Vector2(_targetConteiner.Peek().x * _speed, _rigidbody.velocity.y);
+            _rigidbody.velocity = new Vector2(_target.position.normalized.x * _speed, _rigidbody.velocity.y);
 
-            if (time >= _currentTime)
+            distance = _target.position - transform.position;
+
+            distance.y = 0;
+
+            if (time >= _currentTime || distance.magnitude <= _minDistance)
             {
-                _targetConteiner.Enqueue(_targetConteiner.Dequeue());
+                _index = ++_index % _targetArray.Length;
+
+                _target = _targetArray[_index];
 
                 time = 0f;
 
-                if (_targetConteiner.Peek().x < 0)
+                if ((_target.position - transform.position).normalized.x < 0)
                 {
                     transform.rotation = Quaternion.AngleAxis(_rotationAngle, Vector2.up);
                 }

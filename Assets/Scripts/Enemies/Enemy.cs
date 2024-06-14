@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyMover), typeof(Collider2D))]
-
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private PursuitArea _pursuitArea;
@@ -29,8 +28,6 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
-        StopAllCoroutines();
-
         gameObject.SetActive(false);
     }
 }

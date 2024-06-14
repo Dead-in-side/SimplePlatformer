@@ -5,7 +5,7 @@ public class TriggerReader : MonoBehaviour
 {
     public event Action CoinIsGets;
     public event Action<Enemy> CollisionWithEnemy;
-    public event Action FirstAidKitGet;
+    public event Action<FirstAidKit> FirstAidKitGet;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -17,7 +17,7 @@ public class TriggerReader : MonoBehaviour
         }
         else if (collision.TryGetComponent(out FirstAidKit firstAidKit))
         {
-            FirstAidKitGet?.Invoke();
+            FirstAidKitGet?.Invoke(firstAidKit);
 
             firstAidKit.Desable();
         }

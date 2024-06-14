@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-
 public class PursuitArea : MonoBehaviour
 {
     private Collider2D _collider;

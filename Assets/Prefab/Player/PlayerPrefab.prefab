@@ -104,6 +104,7 @@ GameObject:
   - component: {fileID: 6843422159495341595}
   - component: {fileID: -9162023996424765488}
   - component: {fileID: 3765103509715451763}
+  - component: {fileID: 5844670178051255584}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -188,7 +189,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 8753906888823942106}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e2bec2453b561a145b2cf6502003a461, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -326,3 +327,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 0}
   _legs: {fileID: 7711601395798963908}
+  _fireball: {fileID: 3218919980873607017, guid: 19ebbfcf798f4ea4f824bc9fc4378eee, type: 3}
+--- !u!114 &5844670178051255584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8753906888823942106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4ff3b3281b4aeb4fae6e68d888f82c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 100

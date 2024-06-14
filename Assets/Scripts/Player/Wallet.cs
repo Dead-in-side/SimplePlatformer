@@ -14,6 +14,8 @@ public class Wallet : MonoBehaviour
 
     public void AddCoin()
     {
-        MoneyIsChanged?.Invoke(++CoinNumber);
+        CoinNumber++;
+
+        MoneyIsChanged?.Invoke(CoinNumber);
     }
 }

@@ -2,7 +2,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(TriggerReader), typeof(Wallet))]
 [RequireComponent (typeof(AinmationShifter), typeof(Health))]
-
 public class Player : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
@@ -26,8 +25,8 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _legs.IsOnTheGround += _mover.ChangeFulcrum;
-        _legs.IsOnTheGround += _animationShifter.ChangeFulcrum;
+        _legs.IsGroundedChanged += _mover.ChangeFulcrum;
+        _legs.IsGroundedChanged += _animationShifter.ChangeFulcrum;
 
         _inputReader.MoveButtonPressed += _mover.ChangeDirection;
         _inputReader.MoveButtonPressed += _animationShifter.ChangeAnimationDirection;
@@ -43,8 +42,8 @@ public class Player : MonoBehaviour
 
     private void OnDisable()
     {
-        _legs.IsOnTheGround -= _mover.ChangeFulcrum;
-        _legs.IsOnTheGround -= _animationShifter.ChangeFulcrum;
+        _legs.IsGroundedChanged -= _mover.ChangeFulcrum;
+        _legs.IsGroundedChanged -= _animationShifter.ChangeFulcrum;
 
         _inputReader.MoveButtonPressed -= _mover.ChangeDirection;
         _inputReader.MoveButtonPressed -= _animationShifter.ChangeAnimationDirection;
@@ -61,7 +60,5 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         Fireball fireball = Instantiate(_fireball, transform.position, transform.rotation);
-
-        fireball.ChangeDirection(transform.rotation.y);
     }
 }
