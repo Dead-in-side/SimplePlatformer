@@ -5,7 +5,7 @@ public class Health : MonoBehaviour
 {
     [SerializeField] private float _health = 100;
 
-    public event Action HealthEnd;
+    public event Action IsOver;
 
     public void TakeDamage(Enemy enemy)
     {
@@ -18,7 +18,7 @@ public class Health : MonoBehaviour
 
         if (_health <= 0)
         {
-            HealthEnd?.Invoke();
+            IsOver?.Invoke();
         }
     }
 
@@ -27,7 +27,6 @@ public class Health : MonoBehaviour
         if (firstAidKit.HealPower >= 0)
         {
             _health += firstAidKit.HealPower;
-
         }
 
         Debug.Log(_health);

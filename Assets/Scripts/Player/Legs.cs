@@ -7,7 +7,7 @@ public class Legs : MonoBehaviour
 {
     private bool _isGrounded;
 
-    public event Action<bool> IsGroundedChanged;
+    public event Action<bool> GroundedIsChanged;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -15,7 +15,7 @@ public class Legs : MonoBehaviour
         {
             _isGrounded = true;
 
-            IsGroundedChanged?.Invoke(_isGrounded);
+            GroundedIsChanged?.Invoke(_isGrounded);
         }
     }
 
@@ -25,7 +25,7 @@ public class Legs : MonoBehaviour
         {
             _isGrounded = false;
 
-            IsGroundedChanged?.Invoke(_isGrounded);
+            GroundedIsChanged?.Invoke(_isGrounded);
         }
     }
 }

@@ -12,8 +12,7 @@ public class EnemyMover : MonoBehaviour
     private float _rotationAngle = 180;
     private Rigidbody2D _rigidbody;
     private Coroutine _moverCoroutine;
-    private float _currentTime = 5f;
-    private float _minDistance = 0.1f;
+    private float _minDistance = 1f;
     private int _index;
     private Transform _target;
 
@@ -48,25 +47,19 @@ public class EnemyMover : MonoBehaviour
 
         Vector3 distance;
 
-        float time = 0f;
-
         while (isWork)
         {
-            time += Time.deltaTime;
-
             _rigidbody.velocity = new Vector2(_target.position.normalized.x * _speed, _rigidbody.velocity.y);
 
             distance = _target.position - transform.position;
 
             distance.y = 0;
 
-            if (time >= _currentTime || distance.magnitude <= _minDistance)
+            if (distance.magnitude <= _minDistance)
             {
                 _index = ++_index % _targetArray.Length;
 
                 _target = _targetArray[_index];
-
-                time = 0f;
 
                 if ((_target.position - transform.position).normalized.x < 0)
                 {

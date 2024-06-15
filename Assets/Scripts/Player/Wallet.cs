@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Wallet : MonoBehaviour
 {
-    public event Action<int> MoneyIsChanged;
+    public event Action<int> MoneyQuantityChanged;
 
     public int CoinNumber { get; private set; }
 
@@ -16,6 +16,6 @@ public class Wallet : MonoBehaviour
     {
         CoinNumber++;
 
-        MoneyIsChanged?.Invoke(CoinNumber);
+        MoneyQuantityChanged?.Invoke(CoinNumber);
     }
 }

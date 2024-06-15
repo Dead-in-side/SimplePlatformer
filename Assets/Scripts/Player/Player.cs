@@ -25,36 +25,36 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _legs.IsGroundedChanged += _mover.ChangeFulcrum;
-        _legs.IsGroundedChanged += _animationShifter.ChangeFulcrum;
+        _legs.GroundedIsChanged += _mover.ChangeFulcrum;
+        _legs.GroundedIsChanged += _animationShifter.ChangeFulcrum;
 
         _inputReader.MoveButtonPressed += _mover.ChangeDirection;
         _inputReader.MoveButtonPressed += _animationShifter.ChangeAnimationDirection;
         _inputReader.JumpButonPressed += _mover.Jump;
-        _inputReader.MouseButtomPressed += Attack;
+        _inputReader.ZeroMouseButtomPressed += Attack;
 
-        _triggerReader.CoinIsGets += _wallet.AddCoin;
-        _triggerReader.CollisionWithEnemy += _health.TakeDamage;
-        _triggerReader.FirstAidKitGet += _health.Heal;
+        _triggerReader.CoinTaken += _wallet.AddCoin;
+        _triggerReader.CollisionWithEnemyHappened += _health.TakeDamage;
+        _triggerReader.FirstAidKitTaken += _health.Heal;
 
-        _health.HealthEnd += _animationShifter.Die;
+        _health.IsOver += _animationShifter.Die;
     }
 
     private void OnDisable()
     {
-        _legs.IsGroundedChanged -= _mover.ChangeFulcrum;
-        _legs.IsGroundedChanged -= _animationShifter.ChangeFulcrum;
+        _legs.GroundedIsChanged -= _mover.ChangeFulcrum;
+        _legs.GroundedIsChanged -= _animationShifter.ChangeFulcrum;
 
         _inputReader.MoveButtonPressed -= _mover.ChangeDirection;
         _inputReader.MoveButtonPressed -= _animationShifter.ChangeAnimationDirection;
         _inputReader.JumpButonPressed -= _mover.Jump;
-        _inputReader.MouseButtomPressed -= Attack;
+        _inputReader.ZeroMouseButtomPressed -= Attack;
 
-        _triggerReader.CoinIsGets -= _wallet.AddCoin;
-        _triggerReader.CollisionWithEnemy -= _health.TakeDamage;
-        _triggerReader.FirstAidKitGet -= _health.Heal;
+        _triggerReader.CoinTaken -= _wallet.AddCoin;
+        _triggerReader.CollisionWithEnemyHappened -= _health.TakeDamage;
+        _triggerReader.FirstAidKitTaken -= _health.Heal;
 
-        _health.HealthEnd -= _animationShifter.Die;
+        _health.IsOver -= _animationShifter.Die;
     }
 
     private void Attack()

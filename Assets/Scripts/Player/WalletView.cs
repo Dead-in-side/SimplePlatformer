@@ -18,12 +18,12 @@ public class WalletView : MonoBehaviour
 
     private void OnEnable()
     {
-        _wallet.MoneyIsChanged += ShowMoney;
+        _wallet.MoneyQuantityChanged += ShowMoney;
     }
 
     private void OnDisable()
     {
-        _wallet.MoneyIsChanged -= ShowMoney;
+        _wallet.MoneyQuantityChanged -= ShowMoney;
     }
 
     private void ShowMoney(int money)

@@ -8,7 +8,7 @@ public class InputReader : MonoBehaviour
 
     public event Action<float> MoveButtonPressed;
     public event Action JumpButonPressed;
-    public event Action MouseButtomPressed;
+    public event Action ZeroMouseButtomPressed;
 
     public float Direction {  get; private set; }
 
@@ -24,7 +24,7 @@ public class InputReader : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            MouseButtomPressed?.Invoke();
+            ZeroMouseButtomPressed?.Invoke();
         }
     }
 }

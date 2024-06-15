@@ -3,21 +3,21 @@ using UnityEngine;
 
 public class TriggerReader : MonoBehaviour
 {
-    public event Action CoinIsGets;
-    public event Action<Enemy> CollisionWithEnemy;
-    public event Action<FirstAidKit> FirstAidKitGet;
+    public event Action CoinTaken;
+    public event Action<Enemy> CollisionWithEnemyHappened;
+    public event Action<FirstAidKit> FirstAidKitTaken;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.TryGetComponent(out Coin coin))
         {
-            CoinIsGets?.Invoke();
+            CoinTaken?.Invoke();
 
             coin.Desable();
         }
         else if (collision.TryGetComponent(out FirstAidKit firstAidKit))
         {
-            FirstAidKitGet?.Invoke(firstAidKit);
+            FirstAidKitTaken?.Invoke(firstAidKit);
 
             firstAidKit.Desable();
         }
@@ -28,7 +28,7 @@ public class TriggerReader : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out Enemy enemy))
         {
-            CollisionWithEnemy?.Invoke(enemy);
+            CollisionWithEnemyHappened?.Invoke(enemy);
         }
     }
 }
