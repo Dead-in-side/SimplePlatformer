@@ -1,34 +1,43 @@
 using System;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class HealthForBar : MonoBehaviour
 {
-    [SerializeField] private float _health = 100;
+    [SerializeField] private float _maxValue = 100;
+
+    private float _currentValue;
 
     public event Action IsOver;
+    public event Action IsChanged;
 
-    public void TakeDamage(Enemy enemy)
+    public float MaxValue => _maxValue;
+    public float CurrentValue => _currentValue;
+
+    private void Awake()
     {
-        if ((enemy.Damage >= 0))
+        _currentValue = _maxValue;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if ((damage >= 0))
         {
-            _health -= enemy.Damage;
+            _currentValue -= damage;
+            IsChanged?.Invoke();
         }
 
-        Debug.Log(_health);
-
-        if (_health <= 0)
+        if (_currentValue <= 0)
         {
             IsOver?.Invoke();
         }
     }
 
-    public void Heal(FirstAidKit firstAidKit)
+    public void Heal(float healPower)
     {
-        if (firstAidKit.HealPower >= 0)
+        if (healPower >= 0)
         {
-            _health += firstAidKit.HealPower;
+            _currentValue += healPower;
+            IsChanged?.Invoke();
         }
-
-        Debug.Log(_health);
     }
 }

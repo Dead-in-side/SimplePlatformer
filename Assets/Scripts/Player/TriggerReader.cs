@@ -4,8 +4,8 @@ using UnityEngine;
 public class TriggerReader : MonoBehaviour
 {
     public event Action CoinTaken;
-    public event Action<Enemy> CollisionWithEnemyHappened;
-    public event Action<FirstAidKit> FirstAidKitTaken;
+    public event Action<float> CollisionWithEnemyHappened;
+    public event Action<float> FirstAidKitTaken;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -17,7 +17,7 @@ public class TriggerReader : MonoBehaviour
         }
         else if (collision.TryGetComponent(out FirstAidKit firstAidKit))
         {
-            FirstAidKitTaken?.Invoke(firstAidKit);
+            FirstAidKitTaken?.Invoke(firstAidKit.HealPower);
 
             firstAidKit.Desable();
         }
@@ -28,7 +28,7 @@ public class TriggerReader : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out Enemy enemy))
         {
-            CollisionWithEnemyHappened?.Invoke(enemy);
+            CollisionWithEnemyHappened?.Invoke(enemy.Damage);
         }
     }
 }
