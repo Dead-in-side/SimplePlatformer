@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class HealthForBar : MonoBehaviour
+public class Health : MonoBehaviour
 {
     [SerializeField] private float _maxValue = 100;
 

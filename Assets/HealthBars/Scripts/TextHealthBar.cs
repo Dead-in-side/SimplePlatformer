@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class TextHealthBar : MonoBehaviour
 {
-    [SerializeField] private HealthForBar _health;
+    [SerializeField] private Health _health;
 
     private TextMeshProUGUI _textMeshPro;
 

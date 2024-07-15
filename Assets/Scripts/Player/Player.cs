@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(TriggerReader), typeof(Wallet))]
-[RequireComponent (typeof(AinmationShifter), typeof(HealthForBar))]
+[RequireComponent (typeof(AinmationShifter), typeof(Health))]
 public class Player : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     private TriggerReader _triggerReader;
     private Wallet _wallet;
     private AinmationShifter _animationShifter;
-    private HealthForBar _health;
+    private Health _health;
 
     private void Awake()
     {
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
         _triggerReader = GetComponent<TriggerReader>();
         _mover = GetComponent<Mover>();
         _animationShifter = GetComponent<AinmationShifter>();
-        _health = GetComponent<HealthForBar>();
+        _health = GetComponent<Health>();
     }
 
     private void OnEnable()

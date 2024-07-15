@@ -4,7 +4,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class SliderHealthBar : MonoBehaviour
 {
-    [SerializeField] private HealthForBar _health;
+    [SerializeField] private Health _health;
 
     private Slider _slider;
 

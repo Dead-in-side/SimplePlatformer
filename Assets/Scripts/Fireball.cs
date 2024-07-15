@@ -6,6 +6,7 @@ public class Fireball : MonoBehaviour
     private float _speed = 3;
     private Rigidbody2D _rigidbody;
     private float _lifeTime = 5f;
+    private float _damage = 25;
 
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class Fireball : MonoBehaviour
         _rigidbody.velocity = transform.right * _speed;
 
         _lifeTime-=Time.fixedDeltaTime;
+
         if(_lifeTime <= 0)
         {
             Destroy(gameObject);
@@ -25,9 +27,9 @@ public class Fireball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out Enemy enemy))
+        if (collision.TryGetComponent<Enemy>(out _)&&collision.TryGetComponent(out Health enemyHealth))
         {
-            enemy.Die();
+            enemyHealth.TakeDamage(_damage);
 
             Destroy(gameObject);
         }

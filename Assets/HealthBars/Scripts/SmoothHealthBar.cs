@@ -5,7 +5,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class SmoothHealthBar : MonoBehaviour
 {
-    [SerializeField] private HealthForBar _health;
+    [SerializeField] private Health _health;
 
     private Slider _slider;
     private float _speed= 0.001F;
