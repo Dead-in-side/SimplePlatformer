@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -8,8 +7,8 @@ public class EnemyMover : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private Transform[] _targetArray;
+    [SerializeField] private Rotator _rotator;
 
-    private float _rotationAngle = 180;
     private Rigidbody2D _rigidbody;
     private Coroutine _moverCoroutine;
     private float _minDistance = 1f;
@@ -46,6 +45,7 @@ public class EnemyMover : MonoBehaviour
         bool isWork = true;
 
         Vector3 distance;
+        Vector3 direction;
 
         while (isWork)
         {
@@ -61,14 +61,9 @@ public class EnemyMover : MonoBehaviour
 
                 _target = _targetArray[_index];
 
-                if ((_target.position - transform.position).normalized.x < 0)
-                {
-                    transform.rotation = Quaternion.AngleAxis(_rotationAngle, Vector2.up);
-                }
-                else
-                {
-                    transform.rotation = Quaternion.AngleAxis(0, Vector2.up);
-                }
+                direction = (_target.position - transform.position).normalized;
+
+                _rotator.ChangeDirection(direction.x);
             }
 
             yield return null;
@@ -90,14 +85,7 @@ public class EnemyMover : MonoBehaviour
 
             _rigidbody.velocity = new Vector2(direction.x * _speed, _rigidbody.velocity.y);
 
-            if (direction.x > 0)
-            {
-                transform.rotation = Quaternion.AngleAxis(0, Vector2.up);
-            }
-            else
-            {
-                transform.rotation = Quaternion.AngleAxis(_rotationAngle, Vector2.up);
-            }
+            _rotator.ChangeDirection(direction.x);
 
             yield return null;
         }

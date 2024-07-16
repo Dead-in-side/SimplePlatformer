@@ -10,18 +10,11 @@ public class Mover : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private float _direction;
     private bool _isJump;
-    private float _angleRotate = 180f;
-    private Quaternion _startRotation;
     private bool _isGrounded;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-    }
-
-    private void Start()
-    {
-        _startRotation = transform.rotation;
     }
 
     private void FixedUpdate()
@@ -38,15 +31,6 @@ public class Mover : MonoBehaviour
     public void ChangeDirection(float newDirection)
     {
         _direction = newDirection;
-
-        if (_direction < 0)
-        {
-            transform.rotation = Quaternion.AngleAxis(_angleRotate, Vector2.up);
-        }
-        else if (_direction > 0)
-        {
-            transform.rotation = _startRotation;
-        }
     }
 
     public void ChangeFulcrum(bool isGrounded)=>_isGrounded = isGrounded;

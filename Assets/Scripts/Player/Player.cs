@@ -1,17 +1,18 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(TriggerReader), typeof(Wallet))]
-[RequireComponent (typeof(AinmationShifter), typeof(Health))]
+[RequireComponent (typeof(Health))]
 public class Player : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private Legs _legs;
+    [SerializeField] private Rotator _rotator;
     [SerializeField] private Fireball _fireball;
+    [SerializeField] private AinmationShifter _animationShifter;
 
     private Mover _mover;
     private TriggerReader _triggerReader;
     private Wallet _wallet;
-    private AinmationShifter _animationShifter;
     private Health _health;
 
     private void Awake()
@@ -19,7 +20,6 @@ public class Player : MonoBehaviour
         _wallet = GetComponent<Wallet>();
         _triggerReader = GetComponent<TriggerReader>();
         _mover = GetComponent<Mover>();
-        _animationShifter = GetComponent<AinmationShifter>();
         _health = GetComponent<Health>();
     }
 
@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
         _legs.GroundedIsChanged += _animationShifter.ChangeFulcrum;
 
         _inputReader.MoveButtonPressed += _mover.ChangeDirection;
+        _inputReader.MoveButtonPressed += _rotator.ChangeDirection;
         _inputReader.MoveButtonPressed += _animationShifter.ChangeAnimationDirection;
         _inputReader.JumpButonPressed += _mover.Jump;
         _inputReader.ZeroMouseButtomPressed += Attack;
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
         _legs.GroundedIsChanged -= _animationShifter.ChangeFulcrum;
 
         _inputReader.MoveButtonPressed -= _mover.ChangeDirection;
+        _inputReader.MoveButtonPressed -= _rotator.ChangeDirection;
         _inputReader.MoveButtonPressed -= _animationShifter.ChangeAnimationDirection;
         _inputReader.JumpButonPressed -= _mover.Jump;
         _inputReader.ZeroMouseButtomPressed -= Attack;
@@ -60,5 +62,6 @@ public class Player : MonoBehaviour
     private void Attack()
     {
         Fireball fireball = Instantiate(_fireball, transform.position, transform.rotation);
+        fireball.Initialise(_rotator.transform.rotation.y);
     }
 }
