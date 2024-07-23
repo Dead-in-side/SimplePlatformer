@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(TriggerReader), typeof(Wallet))]
-[RequireComponent (typeof(Health))]
+[RequireComponent (typeof(Health), typeof(Vampirism))]
 public class Player : MonoBehaviour
 {
     [SerializeField] private InputReader _inputReader;
@@ -9,11 +9,13 @@ public class Player : MonoBehaviour
     [SerializeField] private Rotator _rotator;
     [SerializeField] private Fireball _fireball;
     [SerializeField] private AinmationShifter _animationShifter;
+    [SerializeField] private VampirismView _vampirismeView;
 
     private Mover _mover;
     private TriggerReader _triggerReader;
     private Wallet _wallet;
     private Health _health;
+    private Vampirism _vampirism;
 
     private void Awake()
     {
@@ -21,6 +23,7 @@ public class Player : MonoBehaviour
         _triggerReader = GetComponent<TriggerReader>();
         _mover = GetComponent<Mover>();
         _health = GetComponent<Health>();
+        _vampirism = GetComponent<Vampirism>();
     }
 
     private void OnEnable()
@@ -33,12 +36,17 @@ public class Player : MonoBehaviour
         _inputReader.MoveButtonPressed += _animationShifter.ChangeAnimationDirection;
         _inputReader.JumpButonPressed += _mover.Jump;
         _inputReader.ZeroMouseButtomPressed += Attack;
+        _inputReader.VampirismButtonPressed += _vampirism.Switch;
+        _inputReader.VampirismButtonPressed += _vampirism.PullOutHealth;
+        _inputReader.VampirismButtonPressed += _vampirismeView.Play;
 
         _triggerReader.CoinTaken += _wallet.AddCoin;
         _triggerReader.CollisionWithEnemyHappened += _health.TakeDamage;
         _triggerReader.FirstAidKitTaken += _health.Heal;
 
         _health.IsOver += _animationShifter.Die;
+
+        _vampirism.ReceivedHealth += _health.Heal;
     }
 
     private void OnDisable()
@@ -51,12 +59,17 @@ public class Player : MonoBehaviour
         _inputReader.MoveButtonPressed -= _animationShifter.ChangeAnimationDirection;
         _inputReader.JumpButonPressed -= _mover.Jump;
         _inputReader.ZeroMouseButtomPressed -= Attack;
+        _inputReader.VampirismButtonPressed -= _vampirism.Switch;
+        _inputReader.VampirismButtonPressed -= _vampirism.PullOutHealth;
+        _inputReader.VampirismButtonPressed -= _vampirismeView.Play;
 
         _triggerReader.CoinTaken -= _wallet.AddCoin;
         _triggerReader.CollisionWithEnemyHappened -= _health.TakeDamage;
         _triggerReader.FirstAidKitTaken -= _health.Heal;
 
         _health.IsOver -= _animationShifter.Die;
+
+        _vampirism.ReceivedHealth -= _health.Heal;
     }
 
     private void Attack()
