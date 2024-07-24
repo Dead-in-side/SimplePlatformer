@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(VampirismArea))]
 public class Vampirism : MonoBehaviour
 {
+    [SerializeField] private VampirismArea _area;
+    [SerializeField] private VampirismView _view;
+
     private float _maxDuration = 6f;
     private float _duration = 6f;
-    private float _changingSpeed = 1f;
-    private float _absorptionSpeed = 2f;
-    private VampirismArea _area;
-    private List<Enemy> _enemyList = new List<Enemy>();
-    private bool _isEnable = false;
+    private float _absorptionSpeed = 5f;
+    private Enemy _enemyTarget;
+    private bool _isEnable = true;
 
     public event Action<float> ReceivedHealth;
     public event Action IsChanged;
@@ -20,72 +20,67 @@ public class Vampirism : MonoBehaviour
     public float MaxDuration => _maxDuration;
     public float CurrentDuration => _duration;
 
-    private void Awake()
+    private void OnEnable()
     {
-        _area = GetComponent<VampirismArea>();
+        _area.NearestEnemyGeted += SetNearestEnemy;
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        if (!_isEnable && _duration < _maxDuration)
-        {
-            _duration += _changingSpeed * Time.deltaTime;
-
-            IsChanged?.Invoke();
-        }
-        else if (_isEnable && _duration > 0)
-        {
-            _duration -= _changingSpeed * Time.deltaTime;
-
-            IsChanged?.Invoke();
-
-            if (_duration <= 0)
-            {
-                _isEnable = false;
-            }
-        }
+        _area.NearestEnemyGeted -= SetNearestEnemy;
     }
 
     public void PullOutHealth()
     {
         if (_isEnable)
         {
-            _enemyList = _area.GetEnemies();
+            _isEnable = false;
 
-            if (_enemyList.Count > 0)
-            {
-                foreach (Enemy enemy in _enemyList)
-                {
-                    if (enemy.TryGetComponent(out Health health))
-                    {
-                        StartCoroutine(LifeTransferCoroutine(health));
-                    }
-                }
-            }
-            else
-            {
-                _isEnable = false;
-            }
+            _area.gameObject.SetActive(true);
+
+            _view.Play();
+
+            StartCoroutine(LifeTransferCoroutine());
         }
     }
 
-    public void Switch()=> _isEnable = !_isEnable;
-
-    private IEnumerator LifeTransferCoroutine(Health health)
+    private IEnumerator LifeTransferCoroutine()
     {
-        float passedHealth;
+        float passedHealth = _absorptionSpeed * Time.deltaTime;
 
-        while (_isEnable && _duration > 0 && health.CurrentValue > 0)
+        while (_duration > 0)
         {
-            passedHealth = _absorptionSpeed * Time.deltaTime;
+            _duration -= Time.deltaTime;
+            IsChanged?.Invoke();
 
-            health.TakeDamage(passedHealth);
 
-            ReceivedHealth?.Invoke(passedHealth);
+            if (_enemyTarget != null)
+            {
+                _enemyTarget.Health.TakeDamage(passedHealth);
 
+                ReceivedHealth?.Invoke(passedHealth);
+            }
+
+            yield return null;
+        }
+
+        _area.gameObject.SetActive(false);
+
+        StartCoroutine(CooldownCoroutine());
+    }
+
+    private IEnumerator CooldownCoroutine()
+    {
+        while (_duration < _maxDuration)
+        {
+            _duration += Time.deltaTime;
             IsChanged?.Invoke();
 
             yield return null;
         }
+
+        _isEnable = true;
     }
+
+    private void SetNearestEnemy(Enemy enemy) => _enemyTarget = enemy;
 }

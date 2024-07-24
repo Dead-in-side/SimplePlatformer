@@ -8,7 +8,8 @@ public class VampirismView : MonoBehaviour
 
     private Vector3 _startScale;
     private Color _startColor;
-    private float _maxTransparancy = 0.7f;
+    private float _maxTransparancy = 0.5f;
+    private float _delay = 6f;
     private SpriteRenderer _spriteRenderer;
     private float _duration = 1f;
 
@@ -44,6 +45,8 @@ public class VampirismView : MonoBehaviour
 
             yield return null;
         }
+
+        yield return new WaitForSecondsRealtime(_delay);
 
         transform.localScale = Vector3.one;
         _spriteRenderer.color = _startColor;

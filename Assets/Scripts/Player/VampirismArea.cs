@@ -2,26 +2,66 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CircleCollider2D))]
 public class VampirismArea : MonoBehaviour
 {
-    private float _range = 5f;
+    private CircleCollider2D _collider;
+    private List<Enemy> enemies = new List<Enemy>();
+    public float Range { get; private set; } = 5f;
 
-    public float Range => _range;
+    public event Action<Enemy> NearestEnemyGeted;
 
-    public List<Enemy> GetEnemies()
+    private void Awake()
     {
-        List<Enemy> enemies = new List<Enemy>();
+        _collider = GetComponent<CircleCollider2D>();
+        _collider.radius = Range;
+        _collider.isTrigger = true;
 
-        Collider2D[] collidersInside = Physics2D.OverlapCircleAll(transform.position, _range);
+        gameObject.SetActive(false);
+    }
 
-        foreach(Collider2D collider in collidersInside)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent(out Enemy enemy))
         {
-            if(collider.TryGetComponent(out Enemy enemy))
+            Debug.Log("!!!");
+
+            enemies.Add(enemy);
+
+            NearestEnemyGeted?.Invoke(GetNearestEnemy());
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent(out Enemy enemy))
+        {
+            enemies.Remove(enemy);
+
+            NearestEnemyGeted?.Invoke(GetNearestEnemy());
+        }
+    }
+
+    private Enemy GetNearestEnemy()
+    {
+        Enemy nearestEnemy = null;
+
+        if (enemies.Count > 0)
+        {
+            nearestEnemy = enemies[0];
+
+            if (enemies.Count > 1)
             {
-                enemies.Add(enemy);
+                for (int i = 1; i < enemies.Count; i++)
+                {
+                    if ((nearestEnemy.transform.position - transform.position).sqrMagnitude > (enemies[i].transform.position - transform.position).sqrMagnitude)
+                    {
+                        nearestEnemy = enemies[i];
+                    }
+                }
             }
         }
 
-        return enemies;
+        return nearestEnemy;
     }
 }

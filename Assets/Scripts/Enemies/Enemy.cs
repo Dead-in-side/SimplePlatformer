@@ -8,12 +8,12 @@ public class Enemy : MonoBehaviour
     [field: SerializeField] public float Damage { get; private set; } = 30f;
 
     private EnemyMover _mover;
-    private Health _health;
+    public Health Health {  get; private set; }
 
     private void Awake()
     {
         _mover = GetComponent<EnemyMover>();
-        _health = GetComponent<Health>();
+        Health = GetComponent<Health>();
     }
 
     private void OnEnable()
@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
         _pursuitArea.PlayerEnter += _mover.Pursuit;
         _pursuitArea.PlayerExit += _mover.Patrol;
 
-        _health.IsOver += Die;
+        Health.IsOver += Die;
     }
 
     private void OnDisable()
@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
         _pursuitArea.PlayerEnter -= _mover.Pursuit;
         _pursuitArea.PlayerExit -= _mover.Patrol;
 
-        _health.IsOver -= Die;
+        Health.IsOver -= Die;
     }
 
     public void Die()

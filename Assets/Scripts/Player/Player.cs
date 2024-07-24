@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Mover), typeof(TriggerReader), typeof(Wallet))]
+[RequireComponent(typeof(Mover), typeof(Wallet))]
 [RequireComponent (typeof(Health), typeof(Vampirism))]
 public class Player : MonoBehaviour
 {
@@ -9,10 +9,9 @@ public class Player : MonoBehaviour
     [SerializeField] private Rotator _rotator;
     [SerializeField] private Fireball _fireball;
     [SerializeField] private AinmationShifter _animationShifter;
-    [SerializeField] private VampirismView _vampirismeView;
+    [SerializeField] private TriggerReader _triggerReader;
 
     private Mover _mover;
-    private TriggerReader _triggerReader;
     private Wallet _wallet;
     private Health _health;
     private Vampirism _vampirism;
@@ -20,7 +19,6 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         _wallet = GetComponent<Wallet>();
-        _triggerReader = GetComponent<TriggerReader>();
         _mover = GetComponent<Mover>();
         _health = GetComponent<Health>();
         _vampirism = GetComponent<Vampirism>();
@@ -36,9 +34,7 @@ public class Player : MonoBehaviour
         _inputReader.MoveButtonPressed += _animationShifter.ChangeAnimationDirection;
         _inputReader.JumpButonPressed += _mover.Jump;
         _inputReader.ZeroMouseButtomPressed += Attack;
-        _inputReader.VampirismButtonPressed += _vampirism.Switch;
         _inputReader.VampirismButtonPressed += _vampirism.PullOutHealth;
-        _inputReader.VampirismButtonPressed += _vampirismeView.Play;
 
         _triggerReader.CoinTaken += _wallet.AddCoin;
         _triggerReader.CollisionWithEnemyHappened += _health.TakeDamage;
@@ -59,9 +55,7 @@ public class Player : MonoBehaviour
         _inputReader.MoveButtonPressed -= _animationShifter.ChangeAnimationDirection;
         _inputReader.JumpButonPressed -= _mover.Jump;
         _inputReader.ZeroMouseButtomPressed -= Attack;
-        _inputReader.VampirismButtonPressed -= _vampirism.Switch;
         _inputReader.VampirismButtonPressed -= _vampirism.PullOutHealth;
-        _inputReader.VampirismButtonPressed -= _vampirismeView.Play;
 
         _triggerReader.CoinTaken -= _wallet.AddCoin;
         _triggerReader.CollisionWithEnemyHappened -= _health.TakeDamage;
