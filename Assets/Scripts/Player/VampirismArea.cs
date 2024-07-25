@@ -1,44 +1,43 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D))]
 public class VampirismArea : MonoBehaviour
 {
-    private CircleCollider2D _collider;
     private List<Enemy> enemies = new List<Enemy>();
+    private string EnemyLayerName = "Enemy";
+    private Coroutine _coroutine;
     public float Range { get; private set; } = 5f;
 
     public event Action<Enemy> NearestEnemyGeted;
 
-    private void Awake()
+    public void Play()
     {
-        _collider = GetComponent<CircleCollider2D>();
-        _collider.radius = Range;
-        _collider.isTrigger = true;
-
-        gameObject.SetActive(false);
+        _coroutine = StartCoroutine(GetEnemiesCoroutine());
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Stop()
     {
-        if (collision.TryGetComponent(out Enemy enemy))
-        {
-            Debug.Log("!!!");
-
-            enemies.Add(enemy);
-
-            NearestEnemyGeted?.Invoke(GetNearestEnemy());
-        }
+        StopCoroutine(_coroutine);
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private IEnumerator GetEnemiesCoroutine()
     {
-        if (collision.TryGetComponent(out Enemy enemy))
+        bool isWork = true;
+
+        while (isWork)
         {
-            enemies.Remove(enemy);
+            Collider2D[] enemyInRadius = Physics2D.OverlapCircleAll(transform.position, Range, LayerMask.GetMask(EnemyLayerName));
+
+            enemies = enemyInRadius.Select(collider=>collider.GetComponent<Enemy>()).ToList();
+
+            Debug.Log(enemies.Count);
 
             NearestEnemyGeted?.Invoke(GetNearestEnemy());
+
+            yield return null;
         }
     }
 

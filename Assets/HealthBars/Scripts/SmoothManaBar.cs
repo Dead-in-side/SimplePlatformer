@@ -18,12 +18,12 @@ public class SmoothManaBar : MonoBehaviour
 
     private void OnEnable()
     {
-        _vampirism.IsChanged += UpdateValue;
+        _vampirism.DurationChanged += UpdateValue;
     }
 
     private void OnDisable()
     {
-        _vampirism.IsChanged -= UpdateValue;
+        _vampirism.DurationChanged -= UpdateValue;
     }
 
     private void UpdateValue()

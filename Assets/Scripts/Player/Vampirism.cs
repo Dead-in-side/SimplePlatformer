@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Vampirism : MonoBehaviour
@@ -12,10 +11,10 @@ public class Vampirism : MonoBehaviour
     private float _duration = 6f;
     private float _absorptionSpeed = 5f;
     private Enemy _enemyTarget;
-    private bool _isEnable = true;
+    private bool _isAvailable = true;
 
     public event Action<float> ReceivedHealth;
-    public event Action IsChanged;
+    public event Action DurationChanged;
 
     public float MaxDuration => _maxDuration;
     public float CurrentDuration => _duration;
@@ -32,11 +31,11 @@ public class Vampirism : MonoBehaviour
 
     public void PullOutHealth()
     {
-        if (_isEnable)
+        if (_isAvailable)
         {
-            _isEnable = false;
+            _isAvailable = false;
 
-            _area.gameObject.SetActive(true);
+            _area.Play();
 
             _view.Play();
 
@@ -46,13 +45,14 @@ public class Vampirism : MonoBehaviour
 
     private IEnumerator LifeTransferCoroutine()
     {
-        float passedHealth = _absorptionSpeed * Time.deltaTime;
+        float passedHealth;
 
         while (_duration > 0)
         {
-            _duration -= Time.deltaTime;
-            IsChanged?.Invoke();
+            passedHealth = _absorptionSpeed * Time.deltaTime;
 
+            _duration -= Time.deltaTime;
+            DurationChanged?.Invoke();
 
             if (_enemyTarget != null)
             {
@@ -64,7 +64,9 @@ public class Vampirism : MonoBehaviour
             yield return null;
         }
 
-        _area.gameObject.SetActive(false);
+        _view.Stop();
+
+        _area.Stop();
 
         StartCoroutine(CooldownCoroutine());
     }
@@ -74,12 +76,12 @@ public class Vampirism : MonoBehaviour
         while (_duration < _maxDuration)
         {
             _duration += Time.deltaTime;
-            IsChanged?.Invoke();
+            DurationChanged?.Invoke();
 
             yield return null;
         }
 
-        _isEnable = true;
+        _isAvailable = true;
     }
 
     private void SetNearestEnemy(Enemy enemy) => _enemyTarget = enemy;

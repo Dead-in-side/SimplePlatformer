@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -18,15 +19,15 @@ public class PursuitArea : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent(out Player player))
+        if (collision.TryGetComponent(out TriggerReader player))
         {
-            PlayerEnter?.Invoke(player);
+            PlayerEnter?.Invoke(player.GetComponentInParent<Player>());
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<Player>(out _) && gameObject.activeInHierarchy)
+        if (collision.TryGetComponent<TriggerReader>(out _) && gameObject.activeInHierarchy)
         {
             PlayerExit?.Invoke();
         }

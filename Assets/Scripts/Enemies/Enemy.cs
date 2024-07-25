@@ -5,9 +5,8 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private PursuitArea _pursuitArea;
 
-    [field: SerializeField] public float Damage { get; private set; } = 30f;
-
     private EnemyMover _mover;
+    [field: SerializeField] public float Damage { get; private set; } = 30f;
     public Health Health {  get; private set; }
 
     private void Awake()
